@@ -9,6 +9,7 @@
     "lint": "eslint .",
     "preview": "vite preview"
   },
+  "homepage": "https://sungkarb.github.io/vdp.jl",
   "dependencies": {
     "@visx/axis": "^3.12.0",
     "@visx/react-spring": "^3.12.0",
