@@ -72,21 +72,22 @@ function F(v::Array{Float64, 1}, u::Float64)
 end
 
 function runde_knut(v0::Array{Float64, 1}, u::Float64, tend::Float64; h::Float64 = 0.01)
-    t = 0
-    x, y = v0
+    t = 0.0
+    v = copy(v0)
     while t < tend
-        k1_x, k1_y = F([x, y], u)
-        k2_x, k2_y = F([x + h/2 * k1_x, y + h/2 * k1_y], u)
-        k3_x, k3_y = F([x + h/2 * k2_x, y + h/2 * k2_y], u)
-        k4_x, k4_y = F([x + h * k3_x, y + h * k3_y], u)
+        # Adjust step size if we would overshoot
+        dt = min(h, tend - t)
 
+        k1 = F(v, u)
+        k2 = F(v + dt/2 * k1, u)
+        k3 = F(v + dt/2 * k2, u)
+        k4 = F(v + dt * k3, u)
 
-        x = x + h/6 * (k1_x + 2*k2_x + 2*k3_x + k4_x)
-        y = y + h/6 * (k1_y + 2*k2_y + 2*k3_y + k4_y)
-        t += h
+        v = v + dt/6 * (k1 + 2*k2 + 2*k3 + k4)
+        t += dt
     end
 
-    return [x, y]
+    return v
 end
 
 
